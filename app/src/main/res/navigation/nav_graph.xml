@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/remindersFragment">
+
+    <fragment
+        android:id="@+id/remindersFragment"
+        android:name="nl.hva.level3example.ui.RemindersFragment"
+        android:label="fragment_reminder"
+        tools:layout="@layout/fragment_reminders">
+
+        <!-- app:nullable attribute so we can also start our app with this fragment without
+            an argument. Workaround for setting args for navHost fragment-->
+        <argument
+            android:name="reminder"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="nl.hva.level3example.model.Reminder" />
+
+        <action
+            android:id="@+id/action_remindersFragment_to_addReminderFragment"
+            app:destination="@id/addReminderFragment"
+            app:enterAnim="@anim/fragment_open_enter" />
+    </fragment>
+    <fragment
+        android:id="@+id/addReminderFragment"
+        android:name="nl.hva.level3example.ui.AddReminderFragment"
+        android:label="fragment_add_reminder"
+        tools:layout="@layout/fragment_add_reminder" >
+
+        <!-- popToInclusive and popUpTo attributes for clearing the screens stack
+            after adding reminder -->
+        <action
+            android:id="@+id/action_addReminderFragment_to_remindersFragment"
+            app:popUpTo="@+id/nav_graph"
+            app:destination="@id/remindersFragment">
+            <argument
+                android:name="reminder"
+                app:argType="nl.hva.level3example.model.Reminder" />
+        </action>
+
+    </fragment>
+</navigation>
