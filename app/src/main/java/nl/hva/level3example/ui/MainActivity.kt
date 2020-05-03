@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun fabToggler(fab: FloatingActionButton) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in arrayOf(R.id.addReminderFragment)) {
+            if (destination.id in arrayOf(R.id.add_reminder_fragment)) {
                 fab.hide()
             } else {
                 fab.show()

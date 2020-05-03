@@ -5,7 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import nl.hva.level3example.databinding.FragmentRemindersBinding
@@ -25,7 +26,7 @@ class RemindersFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var reminderAdapter: ReminderAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private val args: RemindersFragmentArgs by navArgs()
+//    private val args: RemindersFragmentArgs by navArgs()
 
     private var _binding: FragmentRemindersBinding? = null
 
@@ -47,7 +48,7 @@ class RemindersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRv()
-        receiveAddReminderArgs()
+        observeAddReminderResult()
     }
 
     private fun initRv() {
@@ -64,13 +65,18 @@ class RemindersFragment : Fragment() {
         }
     }
 
-    private fun receiveAddReminderArgs() {
-        //only if we receive one, for example startup of the app with this fragment
-        // doesn't need an argument. Hence the app:nullable
-        args.reminder?.let {
-            reminders.add(it)
-            reminderAdapter.notifyDataSetChanged()
-        }
+    private fun observeAddReminderResult() {
+        //get the savedState, this time on the currentBackStackEntry
+        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
+
+        savedStateHandle?.
+            getLiveData<Reminder>(REMINDER_KEY)?.observe(viewLifecycleOwner, Observer { reminder ->
+                reminders.add(reminder)
+                reminderAdapter.notifyDataSetChanged()
+        })
+
+        //remove it after it's been added to the listview, prevents items being added twice
+        savedStateHandle?.remove<Reminder>(REMINDER_KEY)
     }
 
     /**

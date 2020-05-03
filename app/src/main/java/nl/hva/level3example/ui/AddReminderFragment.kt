@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import nl.hva.level3example.R
 import nl.hva.level3example.databinding.FragmentAddReminderBinding
 import nl.hva.level3example.model.Reminder
 
+const val REMINDER_KEY = "reminder"
 
 class AddReminderFragment : Fragment() {
     private var _binding: FragmentAddReminderBinding? = null
@@ -46,15 +48,11 @@ class AddReminderFragment : Fragment() {
             //create model to send back
             val reminder = Reminder(reminderText)
 
-            //hide keyboard via helper
-            hideKeyboard()
+            //set the data on the previousBackStackEntry, this is the RemindersFragment
+            findNavController().previousBackStackEntry?.savedStateHandle?.set(REMINDER_KEY, reminder)
 
-            //use safeargs here to send Reminder to RemindersFragment
-            val action =
-                AddReminderFragmentDirections.actionAddReminderFragmentToRemindersFragment(
-                    reminder
-                )
-            findNavController(this).navigate(action)
+            //"pop" the backstack, this means we destroy this fragment and go back to the RemindersFragment
+            findNavController().popBackStack()
 
         } else {
             Toast.makeText(
