@@ -48,6 +48,9 @@ class AddReminderFragment : Fragment() {
             //create model to send back
             val reminder = Reminder(reminderText)
 
+            //hide keyboard just before popping
+            hideKeyboard()
+
             //set the data on the previousBackStackEntry, this is the RemindersFragment
             findNavController().previousBackStackEntry?.savedStateHandle?.set(REMINDER_KEY, reminder)
 
