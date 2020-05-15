@@ -20,10 +20,6 @@ const val REMINDER_KEY = "reminder"
 class AddReminderFragment : Fragment() {
     private var _binding: FragmentAddReminderBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView. Nullability is handled by Android SDK (!!)
-    private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,11 +73,4 @@ class AddReminderFragment : Fragment() {
         }
     }
 
-    /**
-     * Make binding null when fragment get's destroyed to prevent mem leaks
-     */
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }
