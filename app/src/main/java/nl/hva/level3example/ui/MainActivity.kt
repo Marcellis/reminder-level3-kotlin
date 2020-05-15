@@ -5,38 +5,31 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_main.*
 import nl.hva.level3example.R
 
-import nl.hva.level3example.databinding.ActivityMainBinding
-
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-        setSupportActionBar(binding.toolbar)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
 
         navController = findNavController(R.id.nav_host_fragment)
 
-        val fab = binding.fab
-        Navigation.setViewNavController(fab, navController)
 
         fab.setOnClickListener {
             navController.navigate(R.id.action_remindersFragment_to_addReminderFragment)
         }
 
-        fabToggler(fab)
-
+        fabToggler()
     }
 
-    private fun fabToggler(fab: FloatingActionButton) {
+
+    private fun fabToggler() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id in arrayOf(R.id.add_reminder_fragment)) {
                 fab.hide()

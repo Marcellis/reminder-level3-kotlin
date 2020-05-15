@@ -9,7 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import nl.hva.level3example.databinding.FragmentRemindersBinding
+import kotlinx.android.synthetic.main.fragment_reminders.*
+import nl.hva.level3example.R
 import nl.hva.level3example.model.Reminder
 
 /**
@@ -23,25 +24,16 @@ class RemindersFragment : Fragment() {
         Reminder("Feed squirrels")
     )
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var reminderAdapter: ReminderAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-//    private val args: RemindersFragmentArgs by navArgs()
-
-    private var _binding: FragmentRemindersBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView. Nullability is handled by Android SDK (!!)
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentRemindersBinding.inflate(inflater, container, false)
+        return inflater.inflate(R.layout.fragment_reminders, container, false)
 
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,13 +44,11 @@ class RemindersFragment : Fragment() {
     }
 
     private fun initRv() {
-        recyclerView = binding.rvReminder
-
 
         reminderAdapter = ReminderAdapter(reminders)
         viewManager = LinearLayoutManager(activity)
 
-        recyclerView.apply {
+        rvReminder.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = reminderAdapter
@@ -70,20 +60,17 @@ class RemindersFragment : Fragment() {
         val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
 
         savedStateHandle?.
-            getLiveData<Reminder>(REMINDER_KEY)?.observe(viewLifecycleOwner, Observer { reminder ->
+            getLiveData<String>(REMINDER_KEY)?.observe(viewLifecycleOwner, Observer { reminderText ->
+                //create model here
+                val reminder = Reminder(reminderText)
+
                 reminders.add(reminder)
                 reminderAdapter.notifyDataSetChanged()
+
         })
 
         //remove it after it's been added to the listview, prevents items being added twice
-        savedStateHandle?.remove<Reminder>(REMINDER_KEY)
+        savedStateHandle?.remove<String>(REMINDER_KEY)
     }
 
-    /**
-     * Make binding null when fragment get's destroyed to prevent mem leaks
-     */
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

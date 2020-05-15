@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.fragment_add_reminder.*
 import nl.hva.level3example.R
 import nl.hva.level3example.databinding.FragmentAddReminderBinding
 import nl.hva.level3example.model.Reminder
@@ -27,32 +28,27 @@ class AddReminderFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentAddReminderBinding.inflate(inflater, container, false)
-
-        return binding.root
+        return inflater.inflate(R.layout.fragment_add_reminder, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnAddReminder.setOnClickListener {
+        btnAddReminder.setOnClickListener {
             onAddReminder()
         }
     }
 
     private fun onAddReminder() {
-        val reminderText = binding.tilReminderText.text.toString()
+        val reminderText = tilReminderText.text.toString()
 
         if (reminderText.isNotBlank()) {
-            //create model to send back
-            val reminder = Reminder(reminderText)
 
-            //hide keyboard just before popping
+            //extra, not mandatory in tutorial
             hideKeyboard()
 
             //set the data on the previousBackStackEntry, this is the RemindersFragment
-            findNavController().previousBackStackEntry?.savedStateHandle?.set(REMINDER_KEY, reminder)
+            findNavController().previousBackStackEntry?.savedStateHandle?.set(REMINDER_KEY, reminderText)
 
             //"pop" the backstack, this means we destroy this fragment and go back to the RemindersFragment
             findNavController().popBackStack()
