@@ -12,13 +12,11 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_add_reminder.*
 import nl.hva.level3example.R
-import nl.hva.level3example.databinding.FragmentAddReminderBinding
 import nl.hva.level3example.model.Reminder
 
 const val REMINDER_KEY = "reminder"
 
 class AddReminderFragment : Fragment() {
-    private var _binding: FragmentAddReminderBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
