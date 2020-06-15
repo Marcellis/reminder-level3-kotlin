@@ -1,11 +1,12 @@
 package nl.hva.level3example.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -56,21 +57,15 @@ class RemindersFragment : Fragment() {
     }
 
     private fun observeAddReminderResult() {
-        //get the savedState, this time on the currentBackStackEntry
-        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
-
-        savedStateHandle?.
-            getLiveData<String>(REMINDER_KEY)?.observe(viewLifecycleOwner, Observer { reminderText ->
-                //create model here
-                val reminder = Reminder(reminderText)
+        setFragmentResultListener(REQ_REMINDER_KEY) { key, bundle ->
+           bundle.getString(BUNDLE_REMINDER_KEY)?.let {
+                val reminder = Reminder(it)
 
                 reminders.add(reminder)
                 reminderAdapter.notifyDataSetChanged()
+            } ?: Log.e("ReminderFragment", "Request triggered, but empty reminder text!")
 
-        })
-
-        //remove it after it's been added to the listview, prevents items being added twice
-        savedStateHandle?.remove<String>(REMINDER_KEY)
+        }
     }
 
 }

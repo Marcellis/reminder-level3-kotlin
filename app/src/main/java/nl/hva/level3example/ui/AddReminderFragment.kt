@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_add_reminder.*
 import nl.hva.level3example.R
-import nl.hva.level3example.model.Reminder
 
-const val REMINDER_KEY = "reminder"
+const val BUNDLE_REMINDER_KEY = "bundle_reminder"
+const val REQ_REMINDER_KEY = "req_reminder"
 
 class AddReminderFragment : Fragment() {
 
@@ -41,8 +42,8 @@ class AddReminderFragment : Fragment() {
             //extra, not mandatory in tutorial
             hideKeyboard()
 
-            //set the data on the previousBackStackEntry, this is the RemindersFragment
-            findNavController().previousBackStackEntry?.savedStateHandle?.set(REMINDER_KEY, reminderText)
+            //set the data as fragmentResult, we are listening for REQ_REMINDER_KEY in RemindersFragment!
+            setFragmentResult(REQ_REMINDER_KEY, bundleOf(Pair(BUNDLE_REMINDER_KEY, reminderText)))
 
             //"pop" the backstack, this means we destroy this fragment and go back to the RemindersFragment
             findNavController().popBackStack()
